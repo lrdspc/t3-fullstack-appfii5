@@ -1,0 +1,189 @@
+# ===============================================================
+# COSINE.SH PIPELINE BLUEPRINT – “PERSONAL & ALUNO” v2.0 ULTRA PRECISION
+# Projeto PWA Fitness – Base: create-t3-app / Integrado a GitHub + Supabase + Vercel
+# ===============================================================
+
+meta:
+  name: "Personal & Aluno"
+  version: "1.0-ultra"
+  author: "Lucas"
+  date_updated: "2025-10-23"
+  source_repo: "GitHub (base create-t3-app já instalado)"
+  integration_stack: ["Supabase (backend/auth/storage)", "Vercel (deploy/PWA)", "GitHub (CI/CD)"]
+  principle: "Sem código neste documento — foco total em escopo, UX, arquitetura e entregáveis Cosine."
+
+goal: >
+  Evoluir o PWA “Personal & Aluno” até sua versão comercial completa, garantindo performance,
+  estabilidade e experiência premium. O sistema deve permitir gestão total entre personal trainers
+  e alunos, com fluxo de convite seguro, acompanhamento físico, relatórios, chat, notificações e modo offline.
+
+context: >
+  O template T3 já está ativo (Next.js, Prisma, Tailwind, tRPC, Auth). Este pipeline amplia o app
+  com funcionalidades específicas para academia digital, respeitando papéis, acessos e vínculo aluno-personal.
+  O Cosine deve executar o projeto como pipeline de alto nível, com agentes independentes nas fases Plan→Launch.
+
+roles:
+  - personal:
+      description: "Usuário principal, cria convites, gerencia alunos, treinos, avaliações e biblioteca."
+      privileges: ["criar/editar convites", "gerir exercícios e treinos", "ler feedbacks", "chat", "notificações"]
+  - aluno:
+      description: "Usuário convidado, executa treinos e envia feedbacks."
+      privileges: ["acessar treino do dia", "ver histórico e progresso", "enviar feedback e mensagens"]
+      restrictions: ["não criar conta", "não editar biblioteca", "não convidar terceiros"]
+
+pipeline:
+
+  - stage: PLAN
+    title: "Arquitetura Estratégica e Modelagem do Sistema"
+    description: >
+      Consolidar toda a base lógica, de dados e comportamento. O foco é criar o blueprint total
+      do sistema: papéis, entidades, integrações e sincronização.
+    tasks:
+      - "Mapear entidades e relacionamentos (usuários, convites, treinos, execuções, chat)."
+      - "Detalhar fluxo de convites via e-mail: personal→aluno→token→ativação."
+      - "Planejar cache offline, reconciliação e observabilidade."
+      - "Documentar dependências GitHub↔Supabase↔Vercel."
+      - "Criar matriz de papéis e acessos."
+      - "Definir KPIs de produto (adesão, uso offline, performance)."
+    deliverables:
+      - "Documento ‘Arquitetura-Funcional.md’"
+      - "Fluxograma convite→ativação→sincronização"
+      - "Plano de CI/CD e env vars"
+    acceptance_criteria:
+      - "Todos fluxos descritos, diagramados e revisados."
+      - "Integração de ambiente configurada (GitHub, Supabase, Vercel)."
+
+  - stage: DESIGN
+    title: "Design UX/UI e Identidade Visual"
+    description: >
+      Criar uma experiência imersiva, profissional e emocionalmente envolvente. Padrão fitness premium:
+      escuro, vibrante, motivacional e responsivo.
+    tasks:
+      - "Wireframes detalhados (login, convite, dashboard, treino, histórico, chat)."
+      - "Design System: Tailwind + ShadCN/UI + tokens de cor e espaçamento."
+      - "Tema: fundo preto/cinza, neon verde-limão + azul elétrico + roxo suave."
+      - "Animações: timers, confete, vibração, check visual."
+      - "UX Writing motivacional ('Última série, você consegue!', 'Treino concluído 💪')."
+      - "Acessibilidade WCAG AA garantida."
+    deliverables:
+      - "UI Kit completo (JSON/YAML)"
+      - "Protótipo navegável Figma"
+      - "Guia de identidade visual (DesignSystem.md)"
+    acceptance_criteria:
+      - "Fluxo navegável mobile e desktop."
+      - "Elementos consistentes e legíveis."
+
+  - stage: BUILD
+    title: "Desenvolvimento e Integração Total"
+    description: >
+      Expandir o projeto T3 com módulos específicos, autenticação via convite e integrações completas.
+      Assegurar performance e sincronização real-time.
+    tasks:
+      - "Implementar Supabase Auth com fluxo de convite:"
+      - "Painel Personal: dashboard, convites, biblioteca, treinos, relatórios e chat."
+      - "Painel Aluno: treino do dia, execução passo a passo, feedback e progresso."
+      - "Biblioteca de exercícios com filtros e upload de mídia (Supabase Storage)."
+      - "PWA completo (manifest, service worker, cache inteligente, instalação)."
+      - "Push notifications (novos treinos, mensagens, inatividade)."
+      - "Deploy contínuo GitHub→Vercel."
+    deliverables:
+      - "Sistema funcional (staging ativo)"
+      - "Manual de variáveis (Ops-Env.md)"
+      - "Relatório de dependências (Deps.md)"
+    acceptance_criteria:
+      - "Convite→ativação funcional ponta a ponta."
+      - "Painéis personal/aluno operacionais."
+      - "PWA offline funcional e responsivo."
+
+  - stage: TEST
+    title: "Qualidade, Segurança e Offline"
+    description: >
+      Garantir estabilidade, performance e segurança. Validar o fluxo de convites, modo offline e responsividade.
+    tasks:
+      - "Testes unitários e funcionais (convite, login, treino, chat)."
+      - "Testar reconexão e sincronização offline."
+      - "Validação de performance (Lighthouse)."
+      - "Testes de acessibilidade e roles."
+      - "Segurança: expiração de tokens, restrição de roles, uploads seguros."
+    deliverables:
+      - "QA Report (bugs, prioridades, fixes)"
+      - "Perf Report (métricas Lighthouse)"
+      - "Checklist de roles (Security.md)"
+    acceptance_criteria:
+      - "TTI ≤ 2.5s, offline 100%, sem erros críticos."
+      - "100% roles restritos corretamente."
+
+  - stage: REFINE
+    title: "Polimento Estético e Microinterações"
+    description: >
+      Ajustar tom, ritmo e polimento visual do produto. Garantir que a experiência final seja empática e
+      prazerosa, sem ruídos ou fricção.
+    tasks:
+      - "Revisar cores, animações e espaçamentos."
+      - "Melhorar microinterações (timers, loaders, feedback visual)."
+      - "Refinar mensagens motivacionais e copywriting."
+      - "Compressão e otimização de mídia (lazy loading)."
+    deliverables:
+      - "UI-Refine.md"
+      - "Brand-Tone.md"
+    acceptance_criteria:
+      - "NPS interno ≥ 8/10."
+      - "Nenhum bug visual ou lag perceptível."
+
+  - stage: LAUNCH
+    title: "Publicação e Operação Contínua"
+    description: >
+      Publicar a versão final e preparar ambiente operacional, documentação e rotinas de backup/monitoramento.
+    tasks:
+      - "Deploy final Vercel (produção)."
+      - "Domínio + SSL configurados."
+      - "Guia de uso (personal/aluno) + README técnico no GitHub."
+      - "Backup Supabase + alertas de logs."
+      - "Gerar changelog v1.0."
+    deliverables:
+      - "PWA ativo e acessível publicamente."
+      - "Documentação completa (Operacao.md)."
+      - "Release GitHub estável (tagged)."
+    acceptance_criteria:
+      - "Convites reais funcionando."
+      - "Observabilidade online (logs + métricas)."
+
+data_model_conceptual:
+  users:
+    fields: [id, nome, email, role(personal|aluno), personal_id, foto_url, created_at]
+    description: "Vínculo aluno→personal."
+  invites:
+    fields: [id, email_aluno, personal_id, token, status, created_at, expires_at]
+    description: "Controle do onboarding seguro via convite."
+  exercicios:
+    fields: [id, nome, grupo_muscular, dificuldade, equipamento, descricao, gif_url, autor_personal_id]
+    description: "Biblioteca global + personalizada."
+  treinos:
+    fields: [id, aluno_id, nome, dias_semana, observacoes, created_at]
+    description: "Treino completo vinculado a aluno."
+  treino_exercicios:
+    fields: [id, treino_id, exercicio_id, series, repeticoes, descanso, carga, obs]
+  execucoes:
+    fields: [id, treino_exercicio_id, data_execucao, series_completas, carga_usada, rpe, feedback_texto]
+  mensagens:
+    fields: [id, remetente_id, destinatario_id, texto, midia_url, lida, created_at]
+    description: "Chat bidirecional."
+
+theme:
+  palette: ["#0a0a0a", "#00ff9d", "#009dff", "#a45eff"]
+  typography: "Inter / Poppins"
+  motion: ["Confete", "Timer Circular", "Vibração Curta", "Fade Suave"]
+  tone: "Motivacional, humano e profissional."
+  accessibility: ["Contraste 4.5:1", "Foco visível", "Labels e ARIA completos"]
+
+metrics:
+  adoption: "≥90% convites aceitos"
+  uptime: "99.9% aplicação estável"
+  sync: "100% reconciliação offline sem perdas"
+  feedbacks: "≥75% alunos enviando feedbacks semanais"
+
+launch_notes: >
+  Ao concluir este pipeline, o Cosine deverá entregar um PWA fitness totalmente operacional,
+  com convites seguros, painéis personalizados, chat, notificações e modo offline. O app deve ser
+  moderno, leve, acessível e visualmente motivador, refletindo o profissionalismo do personal trainer
+  e a disciplina do aluno.
